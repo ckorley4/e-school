@@ -10,22 +10,23 @@ from sqlalchemy import MetaData
 
 # Local imports
 
+
 # Instantiate app, set attributes
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
+#app.json.compact = False
 
 # Define metadata, instantiate db
-metadata = MetaData(naming_convention={
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-})
-db = SQLAlchemy(metadata=metadata)
+
+db = SQLAlchemy()
 migrate = Migrate(app, db)
 db.init_app(app)
 
+#Api.error_router = lambda self, handler, e: handler(e)
 # Instantiate REST API
 api = Api(app)
 
 # Instantiate CORS
 CORS(app)
+
