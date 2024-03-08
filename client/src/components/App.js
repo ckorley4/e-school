@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { Switch, Route } from 'react-router-dom'
+import Student from './Student'
 
 function App() {
-  return <h1>Project Client</h1>;
+  return (
+    <main>
+      <Switch>
+        <Route exact path="/">
+          <Student />
+        </Route>
+      </Switch>
+    </main>
+  )
 }
 
-export default App;
+export default App

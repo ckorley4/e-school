@@ -30,7 +30,7 @@ class Student(db.Model,SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     enrollments = db.relationship('Enrollment',back_populates='student',cascade="all,delete")
-    #serialize_rules = ("-enrollments.student","-created_at","-updated_at",)
+    serialize_rules = ("-enrollments.student","-created_at","-updated_at",)
     
     @validates("year_of_birth")
     def validate_year(self, key, year_of_birth):
@@ -53,9 +53,9 @@ class Enrollment(db.Model,SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     student = db.relationship('Student',back_populates='enrollments')
-    #course =  db.relationship('Course',back_populates='enrollments')
+    course =  db.relationship('Course',back_populates='enrollments')
     
-    serialize_rules = ( "-student.enrollments", )
+    serialize_rules = ( "-student.enrollments","-course.enrollments" )
 
     def __repr__(self):
         return f'<Enrollment {self.id}>'
@@ -72,8 +72,8 @@ class Course(db.Model,SerializerMixin):
     
     #instructor = db.relationship('Instructor',back_populates='courses',cascade="all,delete")
     #venue = db.relationship('Instructor',back_populates='courses',cascade="all,delete")
-    #enrollments = db.relationship('Enrollment',back_populates='course',cascade="all,delete")
-    #serialize_rules = ("-enrollments.course","-created_at","-updated_at",)
+    enrollments = db.relationship('Enrollment',back_populates='course',cascade="all,delete")
+    serialize_rules = ("-enrollments.course","-created_at","-updated_at",)
 
     def __repr__(self):
         return f'<Course {self.id}  {self.description}>'

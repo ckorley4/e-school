@@ -21,8 +21,21 @@ from models import db,Venue,Student,Instructor,Course,Enrollment
 
 @app.route('/students', methods=['GET'])
 def index():
-    student_list =[student.to_dict() for student in Student.query.all()]
+    student_list =[student.to_dict(rules=("-")) for student in Student.query.all()]
     return make_response(student_list,200)
+
+@app.route('/students/<int:id>', methods =['GET','PATCH','DELETE'])
+def student_by_id(id):
+    student = Student.query.filter(Student.id == id).first()
+    if student:
+        print("We are here")
+        if request.method == 'DELETE':
+            print("Almost")
+            db.session.delete(student)
+            db.session.commit()
+            return make_response(student.to_dict(),202)
+        elif request.method == 'GET':
+            return make_response(student.to_dict(rules=("-enrollments",)),200)
 
 @app.route('/venues', methods=['GET'])
 def venues():
