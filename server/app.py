@@ -28,14 +28,37 @@ def index():
 def student_by_id(id):
     student = Student.query.filter(Student.id == id).first()
     if student:
-        print("We are here")
         if request.method == 'DELETE':
-            print("Almost")
             db.session.delete(student)
             db.session.commit()
             return make_response(student.to_dict(),202)
         elif request.method == 'GET':
             return make_response(student.to_dict(rules=("-enrollments",)),200)
+        elif request.method == 'PATCH':
+            try:
+                incoming = request.get_json()
+                for attr in incoming:
+                    setattr(student,attr,incoming[attr])
+                    db.session.commit()
+                return make_response(student.to_dict(),201)
+            except:
+                return make_response({"errors": ["validation errors"]},400)
+        else:
+            return make_response({"error": "Student not Found"},404)
+
+@app.route('/students/new',methods =['POST'])
+def new():
+     try:
+        incoming = request.get_json()
+        new_student = Student(**incoming)
+        db.session.add(new_student)
+        db.session.commit()
+        return make_response(new_student.to_dict,201)
+     except:
+        return make_response({"errors": ["validation errors"]},400)
+     else:
+         return make_response({"error": "Student not Found"},404)
+   
 
 @app.route('/venues', methods=['GET'])
 def venues():

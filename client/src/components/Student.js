@@ -24,8 +24,8 @@ function Student() {
   function handleDeleteStudent(id) {
     fetch(`/students/${id}`, {
       method: 'DELETE',
-    }).then((r) => {
-      if (r.ok) {
+    }).then((resp) => {
+      if (resp.ok) {
         setStudents((students) =>
           students.filter((student) => student.id !== id),
         )

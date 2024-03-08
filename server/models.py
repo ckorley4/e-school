@@ -70,8 +70,8 @@ class Course(db.Model,SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
-    #instructor = db.relationship('Instructor',back_populates='courses',cascade="all,delete")
-    #venue = db.relationship('Instructor',back_populates='courses',cascade="all,delete")
+    instructor = db.relationship('Instructor',back_populates='courses',cascade="all,delete")
+    venue = db.relationship('Instructor',back_populates='courses',cascade="all,delete")
     enrollments = db.relationship('Enrollment',back_populates='course',cascade="all,delete")
     serialize_rules = ("-enrollments.course","-created_at","-updated_at",)
 
